@@ -84,47 +84,40 @@ var CommentBox = React.createClass({
 });
 
 var CommentList = React.createClass({
-  initialized: false,
-
   render: function() {
-    Polymer.Base.async(function() {
-      if (!this.initialized) {
-        this.initializeGrid();
-        this.initialized = true;
-      };
-    }.bind(this));
     return (
-      <vaadin-grid ref="grid" selection-mode="disabled">
-        <table>
-          <colgroup>
-            <col name="id" />
-            <col name="author" />
-            <col name="text" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Timestamp</th>
-              <th>Author</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-        </table>
-      </vaadin-grid>
+      <template is="dom-bind" ref="container">
+        <iron-data-table ref="table">
+          <data-table-column name="Timestamp" sort-by="id">
+            <template>[[_formatTime(item.id)]]</template>
+          </data-table-column>
+          <data-table-column name="Author" selection-enabled>
+            <template>[[item.author]]</template>
+          </data-table-column>
+          <data-table-column name="Comment" selection-enabled>
+            <template>[[item.text]]</template>
+          </data-table-column>
+        </iron-data-table>
+      </template>
     );
   },
 
-  initializeGrid: function() {
-    this.refs.grid.columns[0].renderer = function(cell) {
-      // We happen to know that the id is always a timestamp.
-      var timestamp = new Date(cell.data);
-      cell.element.textContent = (timestamp.getMonth() + 1) + '/' + timestamp.getDate() + '/' + timestamp.getFullYear();
-    };
+  _formatTime: function(id) {
+    var timestamp = new Date(parseInt(id));
+
+    return (timestamp.getMonth() + 1) + '/' + timestamp.getDate() + '/' + timestamp.getFullYear();
+  },
+
+  componentDidMount: function() {
+    if (!this.refs.container._formatTime) {
+      this.refs.container._formatTime = this._formatTime;
+    }
   },
 
   componentWillReceiveProps: function(newProps) {
     // Compare length to avoid re-rendering grid constantly.
     if (this.props.data.length !== newProps.data.length) {
-      this.refs.grid.items = newProps.data;
+      this.refs.table.items = newProps.data;
     }
   }
 });

@@ -3,8 +3,7 @@
   "description": "Code from the React tutorial.",
   "main": "server.js",
   "authors": [
-    "petehunt",
-    "Teemu Pöntelin / Vaadin Ltd"
+    "petehunt"
   ],
   "license": "MIT",
   "keywords": [
@@ -13,7 +12,7 @@
     "comment",
     "example"
   ],
-  "homepage": "https://github.com/reactjs/react-tutorial",
+  "homepage": "https://github.com/tehapo/react-tutorial",
   "moduleType": [],
   "ignore": [
     "**/.*",
